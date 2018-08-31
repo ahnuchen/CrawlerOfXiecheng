@@ -62,15 +62,9 @@ class Main {
 
     async getMainPage() {
         await sequelize.sync()
-        let _this = this
         await nightmare.goto(this.mainPageUrl);
         await nightmare.wait('.hotel_new_list')
-        await sleep(3000)
-        await nightmare.click('#downHerf')
-        await sleep(3000)
-        await nightmare.click('#downHerf')
         await nightmare.inject('js', './jquery.min.js')
-        await sleep(3000)
         let remainCounts = await nightmare.evaluate((parsedHotel) => {
             try {
                 let $hotel = $('.hotel_new_list .hotel_item_name a')
@@ -131,7 +125,7 @@ class Main {
         }).catch(e => console.log(e))
         console.log(pageData)
         if (this.currentPage === pageData.currentPage) {
-            console.log('ip限制！请明天再试')
+            console.log('ip限制！请稍后再试')
             await sleep(100000)
             nightmare.end()
         } else {
@@ -190,8 +184,8 @@ class Main {
 
 
 (async () => {
-
-    let main = new Main(`http://hotels.ctrip.com/hotel/qingdao7/h110#ctm_ref=hod_hp_sb_lst`);
+    let page = `http://hotels.ctrip.com/hotel/qingdao7/h110#ctm_ref=hod_hp_sb_lst`
+    let main = new Main(page);
     await main.getMainPage();
 })();
 
